@@ -11,3 +11,4 @@ before_install:
 script:
   - julia -e 'Pkg.init(); run(`ln -s $(pwd()) $(Pkg.dir("PSGD"))`); Pkg.pin("PSGD"); Pkg.resolve()'
   - julia -e 'using PSGD; @assert isdefined(:PSGD); @assert typeof(PSGD) === Module'
+  - julia -p 4 './test/linear.jl'
