@@ -44,6 +44,7 @@ function sgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, gr
     return theta
 end
 
+# Get the number of "columns"
 function ncols(x)
     if ndims(x) == 1
         return 1
