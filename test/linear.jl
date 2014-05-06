@@ -1,3 +1,4 @@
+# Dummy case test.
 @everywhere using PSGD, Base.Test
 
 x = linspace(1, 100, 100000)

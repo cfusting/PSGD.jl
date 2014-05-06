@@ -16,9 +16,9 @@ function lineargradient(theta::Array{Float64}, x::Array{Float64}, y::Float64)
     return tmptheta
 end 
 
-# Cost... Everyone loves cost!
-function cost(hyp::Float64, y::Float64)
-    return (hyp - y)^2 / 2
+# Stochastic cost function
+function stochasticcost(theta::Array{Float64}, x::Array{Float64}, y::Float64)
+    return (linear_hyp(theta, x) - y)^2 / 2
 end
 
 

@@ -1,3 +1,4 @@
+# Divide up the data into k groups
 function part(d::Array{Float64}, k)
     m = size(d)[1]
     if k > m || k <= 0
@@ -17,6 +18,7 @@ function part(d::Array{Float64}, k)
     return res
 end
 
+# Randomly shuffle a Matrix
 function shuffle!(x::Matrix)
     n = size(x)[1]
     for i = 1:n
@@ -25,3 +27,14 @@ function shuffle!(x::Matrix)
     end
     return x
 end
+
+# Get the number of "columns"
+function ncols(x)
+    if ndims(x) == 1
+        return 1
+    else
+        return size(x)[2]
+    end
+end
+
+
