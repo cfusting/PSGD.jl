@@ -1,4 +1,8 @@
-function psgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, gradient::Function, hyp::Function)
+# Parallel Stochastic Gradient Descent
+# Shuffle data, divide into k groups (k = procs available) and compute Stochastic Gradient Descent on remote processes.
+# Gather results and compute the average.  Solution will be optimal.
+# This function determines procs available using nworkers().
+function psgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, gradient::Function)
     x = [ones(size(x)[1]) x]
     k = nworkers()
     sgdworkers = Array(Any, k)
@@ -10,7 +14,7 @@ function psgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, g
     theta = zeros(Float64, ncols(x))
     for i = 1:k  
         println("Starting process")
-        sgdworkers[i] = @spawn sgd(a, passes, xslices[i], yslices[i], gradient, hyp)
+        sgdworkers[i] = @spawn sgd(a, passes, xslices[i], yslices[i], gradient)
     end
     for i = 1:k
         println("Fetching Results")
@@ -24,7 +28,8 @@ function psgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, g
     return theta / k
 end
 
-function sgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, gradient::Function, hyp::Function)
+# Stochastic Gradient Descent - find the minumim of a function.
+function sgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, gradient::Function)
     if ndims(x) == 1
         theta = zeros(Float64, 1)
     else
@@ -33,7 +38,7 @@ function sgd(a::Float64, passes::Int64, x::Array{Float64}, y::Array{Float64}, gr
     seq = shuffle([ 1:size(x)[1] ])
     for p = 1:passes
         for i in seq
-            theta = sgd_update(a, theta, x[i, 1:end], y[i], gradient, hyp)
+            theta = theta - (a * gradient(theta, x[i, 1:end], y[i]))
         end
     end
     return theta
@@ -47,12 +52,4 @@ function ncols(x)
     end
 end
 
-function sgd_update(a::Float64, theta::Array{Float64}, x::Array{Float64}, y::Float64, gradient::Function, hyp::Function)
-    j = length(theta)
-    tmptheta = zeros(Float64, j)
-    yhat = hyp(theta, x)
-    for i = 1:j
-        tmptheta[i] = theta[i] - (a * gradient(theta, x[i], y, yhat))
-    end
-  return tmptheta
-end
+

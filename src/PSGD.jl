@@ -1,6 +1,6 @@
 module PSGD
 
-export psgd, sgd, linear_gradient, linear_hyp
+export psgd, sgd, lineargradient, linear_hyp
 
 include("psgd.jl")
 include("linear.jl")
