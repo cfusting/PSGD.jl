@@ -7,12 +7,13 @@ Takes advantage of all available cores locally and on remote servers.
 Example usage (linear regression):
 
 ```julia
-@everywhere using PSGD
+everywhere using PSGD, Base.Test
 
 x = linspace(1, 100, 100000)
 y = linspace(100, 200, 100000)
 
-@elapsed psgd(.0002, 200, x, y, linear_gradient, linear_hyp)
+res = psgd(.0002, 200, x, y, lineargradient)
+
 ```
 
 [![Build Status](https://travis-ci.org/cfusting/PSGD.jl.png)](https://travis-ci.org/cfusting/PSGD.jl)

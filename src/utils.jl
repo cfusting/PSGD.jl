@@ -1,4 +1,6 @@
 # Divide up the data into k groups
+# TODO optimize this.. 
+# Column wise copy and pre-allocate the returned array
 function part(d::Array{Float64}, k)
     m = size(d)[1]
     if k > m || k <= 0
